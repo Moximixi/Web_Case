@@ -1,5 +1,4 @@
 *{
-	padding:0;
 	margin: 0;
 }
 #cvd_extension_svg_filter{
@@ -7,15 +6,13 @@
 }
 body{
 	position:relative;
-}
-#all{
-	height: 700px;
-	overflow: hidden;
+	display: flex;
+	justify-content: space-between;
 }
 #map{
 	border:1px solid black;
 	font-size: 0;/*消除行间距*/
-	margin:20px auto;
+	margin: 50px 0;
 }
 
 span{

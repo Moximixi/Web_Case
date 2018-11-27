@@ -1,23 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charst="utf=8">
+	<meta charset="utf-8">
 	<title>贪吃蛇</title>
 	<link rel="stylesheet" href="./index_style.css">
 </head>
 <body>
-<div id="all">
-	<div id="tools">
-	<button id="stop">暂停游戏</button>
-	<button id="continue">继续游戏</button>
-	<button id="easy">初级难度</button>
-	<button id="middle">中级难度</button>
-	<button id="advanced">困难难度</button>
-	<div id="score"></div>
-	<div id="level">中级难度</div>
+	<div>
+		<h3>成绩单</h3>
+		<ol id="score_list">
+	
+		</ol>
 	</div>
+
 	<div id="map"></div>
-</div>
+
+	<div id="tools">
+		<button id="stop">暂停游戏</button>
+		<button id="continue">继续游戏</button>
+		<button id="easy">初级难度</button>
+		<button id="middle">中级难度</button>
+		<button id="advanced">困难难度</button>
+		<button id="clear">清空榜单</button>
+		<div id="score"></div>
+		<div id="level">中级难度</div>
+
+	</div>
 <script src="./snake_js"></script>
 </body>
 </html>
