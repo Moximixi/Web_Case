@@ -1,0 +1,28 @@
+*{
+	padding:0;
+	margin: 0;
+}
+body{
+	position:relative;
+}
+#all{
+	height: 700px;
+	overflow: hidden;
+}
+#map{
+	border:1px solid black;
+	font-size: 0;/*消除行间距*/
+	margin:20px auto;
+}
+
+span{
+	display: inline-block;
+	border: 1px solid black;
+	box-sizing: border-box;/*	告诉浏览器去理解你设置的边框和内边距的值是包含在width内的。*/
+}
+.Food{
+	background-color:red;
+}
+.snake{
+	background-color:blue;
+}

@@ -1,0 +1,172 @@
+var DIR = {
+    DIR_LEFT: 1,
+    DIR_TOP: 2,
+    DIR_RIGHT: 3,
+    DIR_BOTTOM: 4
+}
+var map = {
+    width: 500,
+    height: 500
+}
+var box = {
+    width: 50,
+    height: 50
+}
+var snake = [];//声明成数组!
+var other = [];
+var wNum = map.width / box.width;
+var hNum = map.height / box.height;
+var dir=DIR.DIR_RIGHT;//默认他第一个方块开始向右行驶
+var time=200;//初始速度
+var easy=300;
+var advanced=150;
+var level=document.querySelector("#level");
+var initLong=5;//蛇的初始长度
+
+window.onload = function() {
+    initMap();
+    showFood();
+    var stop = setInterval(snakeMove, time);
+    //暂停游戏
+    document.querySelector('#stop').onclick = function() {
+     	clearInterval(stop);
+    }
+    //继续游戏
+    document.querySelector("#continue").onclick = function() {
+    	clearInterval(stop);
+        stop = setInterval(snakeMove, time);
+    }
+    //难度设置
+    document.querySelector("#easy").onclick = function() {
+    	clearInterval(stop);
+        stop = setInterval(snakeMove, easy);
+        level.innerHTML="初级难度";
+    }
+    document.querySelector("#middle").onclick = function() {
+    	clearInterval(stop);
+        stop = setInterval(snakeMove, time);
+         level.innerHTML="中等难度";
+    }
+    document.querySelector("#advanced").onclick = function() {
+    	clearInterval(stop);
+        stop = setInterval(snakeMove, advanced);
+        level.innerHTML="困难难度";
+    }
+    document.onkeyup = function(e) {
+        switch (e.keyCode) {
+            case 37:
+                {
+                    if (dir == DIR.DIR_RIGHT) break;
+                    else { dir = DIR.DIR_LEFT; break; }//除了向右的时候不能往左，其他任何方向都可以往左
+                }
+            case 38:
+                {
+                    if (dir == DIR.DIR_BOTTOM) break;
+                    else { dir = DIR.DIR_TOP; break; }
+                }
+            case 39:
+                {
+                    if (dir == DIR.DIR_LEFT) break;
+                    else { dir = DIR.DIR_RIGHT; break; }
+                }
+            case 40:
+                {
+                    if (dir == DIR.DIR_TOP) break;
+                    else { dir = DIR.DIR_BOTTOM; break; }
+                }
+            default:
+                break;
+        }
+    }
+}
+
+//生成地图
+function initMap() {
+    var map_target = document.querySelector('#map');
+    map_target.style.width = map.width + "px";
+    map_target.style.height = map.height + "px";
+    var spans=null;
+    for (var i = 1; i <=wNum * hNum; i++) {
+        spans = document.createElement("span");
+        spans.style.width = box.width + "px";
+        spans.style.height = box.height + "px";
+        spans.id = i; //给每个方块一个id
+        map_target.appendChild(spans);
+        if (i <=initLong) {//前五个作为蛇
+            spans.className = "snake";
+            snake.push(spans);
+        } else {
+            other.push(spans);
+        }
+    }
+}
+
+function showFood() {
+    var index = Math.floor(Math.random()* other.length);
+    console.log("随机的食物地址为:"+index);
+    other[index].className = "Food";
+}
+
+function snakeMove() {
+    var headId; //计算新蛇头的id
+    switch (dir) {
+        case DIR.DIR_LEFT:
+            headId = parseInt(snake[snake.length - 1].id) - 1;
+            if (headId % wNum == 0)
+                headId += wNum;
+            break;
+        case DIR.DIR_TOP:
+            headId = parseInt(snake[snake.length - 1].id) - wNum;
+            if (headId < 1)
+                headId += wNum * hNum;
+            break;
+        case DIR.DIR_RIGHT:
+            headId = parseInt(snake[snake.length - 1].id) + 1;
+            if (headId % wNum == 1)
+                headId -= wNum;
+            break;
+        case DIR.DIR_BOTTOM:
+            headId = parseInt(snake[snake.length - 1].id) + wNum;
+            if (headId >wNum*hNum)
+                headId -= wNum * hNum;
+            break;
+        default:
+            break;
+    }
+    //通过新蛇头的id找到对应的span块
+    var head = document.getElementById(headId); 
+    //结束条件：如果蛇头在蛇身上，游戏结束
+    for (var i = 1; i < snake.length; i++) {
+        if (headId ==snake[i].id ) {
+            alert("Game Over!\nScore:"+(snake.length-initLong));
+            window.location.href = window.location.href;
+        }
+    }
+    //计算蛇头在other下的id
+    var index;
+    for (var j = 0; j < other.length; j++) {
+        if (headId ==other[j].id ) {
+            index = j;
+            break;
+        }
+    }
+    other.splice(index, 1); //从other剔除
+    snake.push(head);
+    //如果蛇头刚好是Food
+    if (head.className =="Food") {
+        //如果吃到事物，再次刷新食物
+        showFood();
+    } else {
+        snake[0].className = '';
+        other.push(snake.shift()); //删除snake的尾部，并把他加到other中
+    }
+    //最后将头部改造为蛇的身体的一部分
+    head.className = "snake";
+  	//实时显示成绩
+    var score=document.querySelector("#score");
+    score.innerHTML="<p>Your Score:"+(snake.length-initLong)+"</p>"
+}
+
+/*未完成的功能:
+成绩榜单
+*/	
